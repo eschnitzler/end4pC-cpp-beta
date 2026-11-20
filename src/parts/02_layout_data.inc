@@ -131,6 +131,10 @@ bool inBarLayout(const App& app, const char* m) {
     return false;
 }
 bool isDivider(const std::string& m) { return m == "divider"; }
+double dividerExtent(const Config& cfg) {
+    if (cfg.dividerStyle == "space") return 8;
+    return cfg.dividerStyle == "dot" ? 6 : 2;
+}
 bool repeatable(const std::string& m) { return m == "divider" || m == "visualizer"; }
 std::vector<int> aiShown(const App& app) {
     std::vector<int> v;
@@ -278,7 +282,7 @@ double moduleWidth(const App& app, const std::string& m) {
     if (m == "updates") return updatesShown(app) ? updatesBarW(app) : 0;
     if (m == "activewindow") return awinBarW(app);
     if (m == "keyboard") return app.kbd.list.empty() ? 0 : kbdBarW(app);
-    if (isDivider(m)) return app.cfg.dividerStyle == "dot" ? 6 : 2;
+    if (isDivider(m)) return dividerExtent(app.cfg);
     if (m == "visualizer") return kVizBars * (kVizDot + kVizGap) + (!sideBar(app) && widgetStyle(app, "visualizer") == "m3" ? 2 * kVizM3Pad : 0);
     if (m == "battery") return app.batPresent || lowPeripheral(app) ? batteryW(app) : 0;
     return 0;

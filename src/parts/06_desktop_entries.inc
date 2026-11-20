@@ -403,7 +403,7 @@ double sideModuleH(const App& app, const std::string& m) {
     if (m == "keyboard") return app.kbd.list.empty() ? 0 : 40;
     if (m == "activewindow") return 40;
     if (m == "visualizer") return kVizBars * (kVizDot + kVizGap) + (widgetStyle(app, "visualizer") == "m3" ? 2 * kVizM3Pad : 0);
-    if (isDivider(m)) return app.cfg.dividerStyle == "dot" ? 6 : 2;
+    if (isDivider(m)) return dividerExtent(app.cfg);
     if (m == "battery") return app.statusT[3] > 0.001 ? sideBatteryH(app) * (1 - std::pow(1 - app.statusT[3], 3)) : 0;
     return 0;
 }
@@ -1337,6 +1337,7 @@ double aiBarPaint(cairo_t* cr, const App& app, PangoLayout* layout, double x, do
     return w + outer;
 }
 void dividerPaint(cairo_t* cr, const App& app, double cx, double cy, bool tall) {
+    if (app.cfg.dividerStyle == "space") return;
     const Color c = app.color("on_surface_variant");
     if (app.cfg.dividerStyle == "dot") {
         cairo_new_sub_path(cr);
